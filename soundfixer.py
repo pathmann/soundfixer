@@ -12,6 +12,12 @@ SINK = "alsa_output.pci-0000_25_00.0.analog-stereo"
 
 
 class SinkSetter(Thread):
+    """
+    We need a second pulse client, because moving the sink input in the event loop throws a warning
+    about blocking operations in the eventloop. The move seems successfull, but to be extra secure,
+    move the sink from another thread/pulse client connection
+    """
+
     def __init__(self, sinkid, q):
         Thread.__init__(self)
         self.sinkid = sinkid
