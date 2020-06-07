@@ -1,0 +1,12 @@
+[Unit]
+Description=soundfixer
+After=pulseaudio.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/thomas/Projects/soundfixer
+ExecStart=/home/thomas/.virtualenvs/soundfixer/bin/python soundfixer.py
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

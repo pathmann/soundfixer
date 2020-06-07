@@ -1,0 +1,4 @@
+Something is wrong with my soundcard (Creative Soundblaster AE5) or Pulseaudio.
+Even with setting the default sink in /etc/pulse/default.pa (set-default-sink alsa_output.pci-0000_25_00.0.analog-stereo), Pulseaudio sets all new streams to another sink.
+
+While investigating, this is a workaround to automatically set all new sink-inputs to the right sink.
