@@ -4,12 +4,14 @@ import sys
 
 from threading import Thread
 from queue import Queue
+import time
 
 import pulsectl
 
 
 SINK = "alsa_output.pci-0000_25_00.0.analog-stereo"
-
+CONNECT_TRIES = 5
+CONNECT_SLEEP_TIME_SECS = 1
 
 class SinkSetter(Thread):
     """
@@ -49,7 +51,22 @@ def source_watcher(queue, ev):
 
 
 def main(argv):
-    pulse = pulsectl.Pulse('soundfixer-sourcewatcher')
+    tries = 0
+
+    while True:
+        tries += 1
+
+        try:
+            pulse = pulsectl.Pulse('soundfixer-sourcewatcher')
+        except Exception:
+            if tries >= CONNECT_TRIES:
+                print("no pulse connection after %d tries, I've given up" % tries)
+                return
+            else:
+                time.sleep(CONNECT_SLEEP_TIME_SECS)
+        else:
+            break
+
     sinkid = get_sink(pulse)
     
     if sinkid is None:
